@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Core CSS - Include with every page -->
+<link type="text/css" rel="stylesheet"
+	data-th-href="@{/static/css/bootstrap-3.1.1.min.css}" />
+
+<link type="text/css" rel="stylesheet"
+	data-th-href="@{/static/font-awesome/css/font-awesome.css}" />
+
+<!-- SB Admin CSS - Include with every page -->
+<link type="text/css" rel="stylesheet"
+	data-th-href="@{/static/css/sb-admin.css}" />
+
+<style>
+.no-border-on-me>thead>tr>th, .no-border-on-me>tbody>tr>th,
+	.no-border-on-me>tfoot>tr>th, .no-border-on-me>thead>tr>td,
+	.no-border-on-me>tbody>tr>td, .no-border-on-me>tfoot>tr>td {
+	border-top-style: none;
+	border-bottom-style: none;
+}
+</style>
+</head>
+
+<body>
+
+	<div id="wrapper">
+		<!-- /#wrapper -->
+
+		<div data-th-replace="fragments/sb-admin :: top-nav"></div>
+
+		<div data-th-replace="fragments/sb-admin :: vert-nav-admin"></div>
+
+
+		<div id="page-wrapper">
+			<div class="col-md-6 col-md-offset-2">
+				<div class="panel panel-primary">
+					<div class="panel-heading">Crear Producto</div>
+					<div class="panel-body">
+
+						<form class="form-horizontal" role="form" th:object="${producto}"
+							action="insertarProducto" method="POST">
+
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="tnombre">Nombre:</label>
+								<div class="col-md-6">
+									<input id="txtnombre" name="txtnombre" type="text"
+										th:field="*{nombre}" class="form-control input-md">
+										<p th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></p>
+								</div>
+							</div>
+
+
+							<!-- Text input-->
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="txtPrecio">Precio:</label>
+								<div class="col-md-6">
+									<input id="txtprecio" name="txtprecio" type="text"
+										th:field="*{precio}" class="form-control input-md" required>
+										<p th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></p>
+								</div>
+							</div>
+
+							<!-- Text input-->
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="txtstock">Stock:</label>
+								<div class="col-md-6">
+									<input id="txtstock" name="txtstock" type="text"
+										th:field="*{stock}" class="form-control input-md" required>
+										<p th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}"></p>
+								</div>
+							</div>
+
+							<!-- Text input-->
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="cbocategoria">Categoría</label>
+								<div class="col-md-6">
+									<select class="form-control" id="cbocategoria"
+										name="cbocategoria" th:field="*{categoria}">
+										<option value="">Selecciona Categoria</option>
+										<option th:each="c : ${categorias}" th:value="${{c}}"
+											th:text="${c.denominacion}"></option>
+									</select>
+								</div>
+							</div>
+
+							<!-- Text input-->
+							<div class="form-group">
+								<label class="col-md-4 control-label" for="baceptar"></label>
+								<div class="col-md-8">
+									<button id="baceptar" name="baceptar" class="btn btn-primary"
+										type="submit">Guardar</button>
+									<a th:href="@{'/producto/index'}" class="btn btn-danger">Cancelar</a>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>

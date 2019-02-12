@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html ng-app="mcategoria" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<!-- Core CSS - Include with every page -->
+<link type="text/css" rel="stylesheet"
+	data-th-href="@{/static/css/bootstrap-3.1.1.min.css}" />
+
+<link type="text/css" rel="stylesheet"
+	data-th-href="@{/static/font-awesome/css/font-awesome.css}" />
+
+<!-- SB Admin CSS - Include with every page -->
+<link type="text/css" rel="stylesheet"
+	data-th-href="@{/static/css/sb-admin.css}" />
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+
+<style>
+.no-border-on-me>thead>tr>th, .no-border-on-me>tbody>tr>th,
+	.no-border-on-me>tfoot>tr>th, .no-border-on-me>thead>tr>td,
+	.no-border-on-me>tbody>tr>td, .no-border-on-me>tfoot>tr>td {
+	border-top-style: none;
+	border-bottom-style: none;
+}
+</style>
+</head>
+
+<body ng-controller="categoriaCtrl">
+
+	<div id="wrapper">
+		<!-- /#wrapper -->
+
+		<div data-th-replace="fragments/sb-admin :: top-nav"></div>
+
+		<div data-th-replace="fragments/sb-admin :: vert-nav-admin"></div>
+
+		<div id="page-wrapper">
+			<div class="container" -fluid xyz>
+				<div class="col-lg-8">
+
+	<div ng-switch="vista">
+        <div ng-switch-when="formulario">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <div ng-switch="botones">
+                        <div ng-switch-when = "noeditable">
+                            <div class="form-group">
+                                <div class="col-md-8">
+                                    <input type="button"   value="Nuevo" ng-click="nuevo()" class="btn btn-primary"  />
+                                    <input type="button" value="Editar" ng-click="editar()" class="btn btn-primary" />
+                                    <input type="button"  value="Eliminar" ng-click="borrar()" class="btn btn-primary"/>
+                                    <input type="button"  value="Buscar"  ng-click="buscar()" class="btn btn-primary" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ng-switch-when = "editable">
+                            <div class="form-group">
+
+                                <div class="col-md-8">
+                                    <input type="button" value="Guardar" ng-click="guardar()" class="btn btn-primary"/>
+                                    <input type="button"   value="Cancelar"  ng-click="cancelar()" class="btn btn-primary"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-primary class">
+                <div class="panel-heading">Categorias:</div>
+                <div class="panel-body">
+                    <form id="form1" class="form-horizontal" >
+                        <table    class="table table-responsive">
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="label">Id:</label>
+                                        <div class="col-md-4">
+                                            <input id="label" name="t5" type="text" placeholder="Codigo" ng-model="categoriaActual.id" ng-readonly="sololectura"  class="form-control input-md" required="">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label" for="label2">Denominacion:</label>
+                                        <div class="col-md-8">
+                                            <input id="label2" name="t5" type="text" placeholder="Nombre" ng-model="categoriaActual.denominacion" ng-readonly="sololectura"  class="form-control input-md" required="">
+                                        </div>
+                                    </div>
+                                    
+                                </td>
+                                <td><div align="center"></div></td>
+                            </tr>
+                        </table>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div   ng-switch-when="listado">
+
+        	<div class="panel panel-info">
+				<div class="panel-body">                      
+                    <div class="form-group">
+
+                        <div class="col-md-8">
+                        	<input type="button"  value="Atr&aacute;s"  ng-click="formulario()" class="btn btn-danger" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class='panel panel-default'>
+                <div class="panel-heading">CATEGORIAS:</div>
+                <div class='panel-body'>
+                    Buscar <input type="text" ng-model="filtro">
+                    <br> <br>
+                    <table class="table table-condensed  table-striped " id="tablatema">
+                        <tr>
+
+                            <td>Id</td>
+                            <td>Nombres</td>
+                            <td>Accion</td>
+                        </tr>
+
+                        <tr ng-repeat='c in categorias| filter:filtro'>
+
+                            <td>{{c.id}}</td>
+                            <td>{{c.denominacion}}</td>
+                        
+                            <td><a href="" ng-click="seleccionar(c.id)">Seleccionar:</a> </td>
+
+                        </tr>
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+					
+
+				</div>
+			</div>
+
+
+		</div>
+		<!-- page wrapper -->
+	</div>
+	<!-- /#wrapper -->
+
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script type="text/javascript"
+		data-th-src="@{/static/js/jquery-1.11.0.min.js}"></script>
+
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script type="text/javascript"
+		data-th-src="@{/static/js/bootstrap-3.1.1.min.js}"></script>
+
+	<!-- Core Scripts - Include with every page -->
+	<script type="text/javascript"
+		data-th-src="@{/static/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+
+	<!-- SB Admin Scripts - Include with every page -->
+	<script type="text/javascript" data-th-src="@{/static/js/sb-admin.js}"></script>
+	
+	<!--PRIMERO SE TIENE QUE CARGAR LA LIBRERIA -->
+	<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+
+	<!--LUEGO EL  CONTROLADOR -->
+	<script type="text/javascript"
+		data-th-src="@{/static/js/controller/controllercat.js}"></script>
+   
+	<script
+		src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+</body>
+</html>
+
+

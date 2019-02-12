@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html ng-app="mventa" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+
+<!-- Core CSS - Include with every page -->
+<link type="text/css" rel="stylesheet"
+	data-th-href="@{/static/css/bootstrap-3.1.1.min.css}" />
+
+<link type="text/css" rel="stylesheet"
+	data-th-href="@{/static/font-awesome/css/font-awesome.css}" />
+
+<!-- SB Admin CSS - Include with every page -->
+<link type="text/css" rel="stylesheet"
+	data-th-href="@{/static/css/sb-admin.css}" />
+
+<link
+	href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"
+	rel="stylesheet" />
+
+<style>
+.no-border-on-me>thead>tr>th, .no-border-on-me>tbody>tr>th,
+	.no-border-on-me>tfoot>tr>th, .no-border-on-me>thead>tr>td,
+	.no-border-on-me>tbody>tr>td, .no-border-on-me>tfoot>tr>td {
+	border-top-style: none;
+	border-bottom-style: none;
+}
+</style>
+</head>
+
+<body ng-controller="ventaCtrl">
+
+	<div id="wrapper">
+		<!-- /#wrapper -->
+
+		<div data-th-replace="fragments/sb-admin :: top-nav"></div>
+
+		<div data-th-replace="fragments/sb-admin :: vert-nav-admin"></div>
+
+		<div id="page-wrapper">
+			<div class="container" -fluid xyz>
+				<div class="col-lg-10">
+
+					<div ng-switch="vista">
+
+<!-- <div ng-switch-when="listado"> -->
+
+	<div class='panel panel-default'>
+		<div class="panel-heading">VENTAS:</div>
+		<div class='panel-body'>
+			Buscar <input type="text" ng-model="filtro"> <br>
+			<br>
+			<table class="table table-condensed  table-striped "
+				id="tablatema">
+				<tr>
+					<td>Id</td>
+					<td>Documento</td>
+					<td>Numero</td>
+					<td>Fecha</td>
+					<td>SubTotal</td>
+					<td>IGV</td>
+					<td>Total</td>
+					<td>Estado</td>
+					<td>Accion</td>
+				</tr>
+	
+				<tr ng-repeat='p in facturas| filter:filtro'>
+	
+					<td>{{p.id}}</td>
+					<td>{{p.documento.nombre}}</td>
+					<td>{{p.nrofactura}}</td>
+					<td>{{p.fecha}}</td>
+					<td>{{p.subtotal | currency:"S/ "}}</td>
+					<td>{{p.igv | currency:"S/ "}}</td>
+					<td>{{p.total | currency:"S/ "}}</td>
+					<td>{{p.estado}}</td>
+					<td>
+					<a ng-click="anular(p.id)" class="btn btn-danger" title="Anular"><i class="fa fa-ban"></i></a>
+					<a ng-click="activar(p.id)" class="btn btn-info" title="Anular"><i class="	fa fa-check"></i></a>
+					<a ng-click="ver(p.id)" class="btn btn-success" title="Visualizar"><i class="fa fa-eye"></i></a>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+							
+<!-- </div> -->
+						
+<!-- <div ng-switch-when="detalle"> -->
+
+	<table class="table invoice-items">
+		<thead>
+			<tr class="h4 text-dark">
+				<th class="text-weight-semibold">#</th>
+				<th class="text-weight-semibold">Producto</th>
+				<th class="text-center text-weight-semibold">Precio</th>
+				<th class="text-center text-weight-semibold">Cantidad</th>
+				<th class="text-center text-weight-semibold">Total</th>
+			</tr>
+		</thead>
+		<tbody id="content-items">
+	
+			<tr ng-repeat="producto in detalle">
+				<td>{{ $index + 1 }}</td>
+				<td class="text-center">{{producto.producto.nombre}}</td>
+				<td class="text-center">{{producto.precio | currency:"S/ "}}</td>
+				<td class="text-center">{{producto.cantidad}}</td>
+				<td class="text-center">{{producto.subtotal | currency:"S/ "}}</td>
+			</tr>
+	
+		</tbody>
+	</table>
+						
+<!-- </div>				 -->
+						
+					</div>
+
+
+				</div>
+			</div>
+
+
+		</div>
+		<!-- page wrapper -->
+	</div>
+	<!-- /#wrapper -->
+
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script type="text/javascript"
+		data-th-src="@{/static/js/jquery-1.11.0.min.js}"></script>
+
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script type="text/javascript"
+		data-th-src="@{/static/js/bootstrap-3.1.1.min.js}"></script>
+
+	<!-- Core Scripts - Include with every page -->
+	<script type="text/javascript"
+		data-th-src="@{/static/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+
+	<!-- SB Admin Scripts - Include with every page -->
+	<script type="text/javascript" data-th-src="@{/static/js/sb-admin.js}"></script>
+
+	<!--PRIMERO SE TIENE QUE CARGAR LA LIBRERIA -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+
+	<!--LUEGO EL  CONTROLADOR -->
+	<script type="text/javascript"
+		data-th-src="@{/static/js/controller/controllerventas.js}"></script>
+
+	<script
+		src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+</body>
+</html>
+
+

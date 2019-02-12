@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html ng-app="mfactura" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+
+<!-- Core CSS - Include with every page -->
+<link type="text/css" rel="stylesheet"
+	data-th-href="@{/static/css/bootstrap-3.1.1.min.css}" />
+
+<link type="text/css" rel="stylesheet"
+	data-th-href="@{/static/font-awesome/css/font-awesome.css}" />
+
+<!-- SB Admin CSS - Include with every page -->
+<link type="text/css" rel="stylesheet"
+	data-th-href="@{/static/css/sb-admin.css}" />
+
+<!-- <link type="text/css" rel="stylesheet" -->
+<!-- 	data-th-href="@{/static/css/theme.css}" /> -->
+
+<link
+	href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"
+	rel="stylesheet" />
+	
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+
+
+<style>
+.no-border-on-me>thead>tr>th, .no-border-on-me>tbody>tr>th,
+	.no-border-on-me>tfoot>tr>th, .no-border-on-me>thead>tr>td,
+	.no-border-on-me>tbody>tr>td, .no-border-on-me>tfoot>tr>td {
+	border-top-style: none;
+	border-bottom-style: none;
+}
+</style>
+
+<style type="text/css">
+.fact {
+	color: #777;
+	font-family: "Open Sans", Arial, sans-serif;
+	line-height: 22px;
+	margin: 0;
+	font-size: 13px;
+}
+
+.form-control-2 {
+	background: transparent;
+	border: none;
+	border-bottom: 1px dashed #83A4C5;
+	width: 100%;
+	outline: none;
+	padding: 0px 0px 0px 0px;
+	font-style: italic;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 16px;
+}
+
+.form-control-3 {
+	background: transparent;
+	border: none;
+	border-bottom: 1px dashed #83A4C5;
+	width: 85%;
+	outline: none;
+	padding: 0px 0px 0px 0px;
+	font-style: italic;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 16px;
+}
+
+.form-control-2:focus {
+	border-bottom: 1px dashed #1174d8;
+}
+
+.shadow1 {
+	-webkit-box-shadow: 10px 10px 20px 5px rgba(0, 0, 0, 0.32);
+	-moz-box-shadow: 10px 10px 20px 5px rgba(0, 0, 0, 0.32);
+	box-shadow: 10px 10px 20px 5px rgba(0, 0, 0, 0.32);
+}
+
+.text-dark {
+	color: #171717 !important;
+}
+
+.invoice table.table>thead:first-child>tr>th {
+	background-color: #F8F8F8;
+	border-bottom: 1px solid #DADADA;
+	border-top: 1px solid #DADADA;
+}
+</style>
+
+</head>
+
+<body ng-controller="facturaCtrl">
+
+	<div id="wrapper">
+		<!-- /#wrapper -->
+
+		<div data-th-replace="fragments/sb-admin :: top-nav"></div>
+
+		<div data-th-replace="fragments/sb-admin :: vert-nav-admin"></div>
+
+		<div id="page-wrapper">
+			<div class="container" -fluid xyz>
+				<div class="row">
+					<div class="col-lg-10">
+
+<div ng-switch="vista">
+	
+	<div ng-switch-when="clientes">
+		<div class='panel panel-default'>
+			<div class="panel-heading">CLIENTES:</div>
+			<div class='panel-body'>
+				Buscar <input type="text" ng-model="filtro"> <br>
+				<br>
+				<table class="table table-condensed  table-striped "
+					id="tablatema">
+					<tr>
+		
+						<td>Id</td>
+						<td>Apellidos</td>
+						<td>Nombres</td>
+						<td>Direcci&oacute;n</td>
+						<td>DNI</td>
+						<td>Accion</td>
+					</tr>
+		
+					<tr ng-repeat='c in clientes| filter:filtro'>
+		
+						<td>{{c.id}}</td>
+						<td>{{c.apellidos}}</td>
+						<td>{{c.nombres}}</td>
+						<td>{{c.direccion}}</td>
+						<td>{{c.dni}}</td>
+		
+						<td><a href="" ng-click="seleccionar_cliente(c.id)">Seleccionar:</a>
+						</td>
+		
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+	<div ng-switch-when="factura">
+<!-- start: page -->
+<section class="panel fact">
+	<div class="panel-body shadow1" ng-switch="boton">
+		<div class="invoice">
+			<header class="clearfix">
+				<div class="row">
+					<div class="col-sm-4 mt-md">
+						<div ng-switch-when="btnNuevo">
+							<button  class="btn btn-info" ng-click="btnNuevo()">Nuevo</button>
+						</div>
+						<div ng-switch-when="btnCancelar">
+							<button class="btn btn-danger" ng-click="btnCancelar()">Cancelar</button>
+						</div>
+						
+						<div ng-switch-when="btnCancelar">
+							<h2 class="h2 mt-none mb-sm text-dark text-weight-bold"
+								ng-model="productoActual.id">{{documentoActual.nombre}}</h2>
+							<label ng-repeat="n in documentos">
+					        	 <button class="btn btn-default" ng-click="seleccionar_documento(n.id)">{{n.nombre}}</button>
+					         </label>
+							<h4 class="h4 m-none text-dark text-weight-bold">#{{facturaActual.nrofactura}}</h4>
+						</div>
+					</div>
+					<div class="col-sm-8 text-right mt-md mb-md">
+						<address class="ib mr-xlg">
+							Marquinho Moya Rivera <br> Jr Ricardo Palma 412-
+							Huaraz <br> Celular: 951571305 <br>
+							mmoya@hardsystem.org
+						</address>
+					</div>
+				</div>
+			</header>
+			<div class="bill-info">
+				<div class="row">
+					<div class="col-md-8">
+						<div class="bill-to">
+							<p class="h5 mb-xs text-dark text-weight-semibold">Para: </p>
+							
+
+                            <form class="form-horizontal form-bordered" method="get">         
+								<div class="form-group">
+									<label class="col-md-2" for="inputDefault">DNI:</label>
+									<div class="col-md-6">
+										<div ng-switch-when="btnCancelar">
+										<input type="text" class="form-control-3" value="{{clienteActual.dni}}" 
+											readonly="" />										
+										<button class="btn btn-info" ng-model="btnbuscarcliente" ng-click="buscarcliente()" >+</button>
+										</div>
+									</div>
+								</div>
+							</form>
+                            
+                            <form class="form-horizontal form-bordered" method="get">         
+								<div class="form-group">
+									<label class="col-md-2" for="inputDefault">Nombres:</label>
+									<div class="col-md-8">
+										<div ng-switch-when="btnCancelar">
+										<input type="text" class="form-control-3" value="{{clienteActual.nombres}} {{clienteActual.apellidos}}" 
+											readonly="" />
+										</div>	
+									</div>
+								</div>
+							</form>
+							
+							<form class="form-horizontal form-bordered" method="get">         
+								<div class="form-group">
+									<label class="col-md-2" for="inputDefault">Direcci&oacute;n:</label>
+									<div class="col-md-8">
+										<div ng-switch-when="btnCancelar">
+										<input type="text" class="form-control-3" value="{{clienteActual.direccion}}" 
+											readonly="" />
+										</div>	
+									</div>
+								</div>
+							</form>
+
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="bill-data text-right">
+							<p class="h5 mb-xs text-dark text-weight-semibold">&nbsp;</p>
+
+							<form class="form-horizontal form-bordered" method="get">
+								<div class="form-group">
+									<label class="col-md-4 text-left" for="inputDefault">Fecha:</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control-2" id="idfecha"
+											value="{{ fechaActual }}">
+									</div>
+								</div>
+							</form>
+							
+							<form class="form-horizontal form-bordered" method="get">
+								<div class="form-group">
+									<label class="col-md-4 text-left" for="inputDefault">Moneda:</label>
+									<div class="col-md-8">
+										<input type="text" class="form-control-2" id="idmoneda"
+											value="PEN" readonly="">
+									</div>
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="table-responsive">
+				<table class="table invoice-items">
+					<thead>
+						<tr class="h4 text-dark">
+							<th class="text-weight-semibold">#</th>
+							<th class="text-weight-semibold">Producto</th>
+							<th class="text-center text-weight-semibold">Precio</th>
+							<th class="text-center text-weight-semibold">Cantidad</th>
+							<th class="text-center text-weight-semibold">Total</th>
+							<th class="text-center text-weight-semibold"></th>
+						</tr>
+					</thead>
+					<tbody id="content-items">
+
+						<tr ng-repeat="producto in detalle">
+							<td>{{ $index + 1 }}</td>
+							<td class="text-center">{{producto.nombre}}</td>
+							<td class="text-center">{{producto.precio | currency:"S/ "}}</td>
+							<td class="text-center">{{producto.cantidad}}</td>
+							<td class="text-center">{{producto.subtotal | currency:"S/ "}}</td>
+							<td>
+								<button class="btn btn-danger"
+									ng-click="quitarproducto($index);">
+									<i class="fa fa-trash-o"></i>
+								</button>
+							</td>
+						</tr>
+
+					</tbody>
+				</table>
+
+				<div ng-switch-when="btnCancelar">
+					<button type="button" class="mb-xs mt-xs mr-xs btn btn-info"
+						ng-click="buscarproducto()" ng-model="btnbuscarproducto">
+						<i class="fa fa-plus"></i>
+					</button>
+				</div>
+			</div>
+
+			<div class="invoice-summary">
+				<div class="row">
+					<div class="col-sm-4 col-sm-offset-8">
+						<table class="table h5 text-dark">
+							<tbody>
+								<tr class="b-top-none">
+									<td colspan="2">Subtotal</td>
+									<td class="text-left">{{subtotal | currency:"S/ "}}<span id="val_subtotal"></span>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="2">IGV</td>
+									<td class="text-left">{{igv | currency:"S/ "}}<span id="val_IGV"></span>
+									</td>
+								</tr>
+								<tr class="h4">
+									<td colspan="2">Total</td>
+									<td class="text-left">{{total | currency:"S/ "}}<span id="val_total">
+									</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div ng-switch-when="btnCancelar">
+			<div class="text-right mr-lg">
+				<a href="#" ng-click="guardar()" class="btn btn-success" id="btn_process">Guardar</a>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- end: page -->
+	</div>
+	
+	<div ng-switch-when="productos">
+		<div class='panel panel-default'>
+			<div class="panel-heading">PRODUCTOS:</div>
+			<div class='panel-body'>
+				Buscar <input type="text" ng-model="filtro"> <br>
+				<br>
+				<table class="table table-condensed  table-striped "
+					id="tablatema">
+					<tr>
+						<td>Id</td>
+						<td>Nombres</td>
+						<td>Stock</td>
+						<td>Precio</td>
+						<td>Categoria</td>
+						<td>Cantidad</td>
+						<td>Accion</td>
+					</tr>
+					<tr ng-repeat='p in productos| filter:filtro'>
+						<td>{{p.id}}</td>
+						<td>{{p.nombre}}</td>
+						<td>{{p.stock}}</td>
+						<td>{{p.precio}}</td>
+						<td>{{p.categoria.denominacion}}</td>
+						<td><input type="number" ng-model="cantidad" style="width: 70px;" />
+							<p>Total: {{p.precio * cantidad | currency:"S/ "}} </p>
+							
+						</td>
+						<td><a href="#" ng-click="seleccionar_producto(p.id, cantidad)">Seleccionar</a>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+</div>
+
+
+
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+		<!-- page wrapper -->
+	</div>
+	<!-- /#wrapper -->
+
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script type="text/javascript"
+		data-th-src="@{/static/js/jquery-1.11.0.min.js}"></script>
+
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script type="text/javascript"
+		data-th-src="@{/static/js/bootstrap-3.1.1.min.js}"></script>
+
+	<!-- Core Scripts - Include with every page -->
+	<script type="text/javascript"
+		data-th-src="@{/static/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+
+	<!-- SB Admin Scripts - Include with every page -->
+	<script type="text/javascript" data-th-src="@{/static/js/sb-admin.js}"></script>
+
+			
+	<!--PRIMERO SE TIENE QUE CARGAR LA LIBRERIA -->
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+
+	<!--LUEGO EL  CONTROLADOR -->
+	<script type="text/javascript"
+		data-th-src="@{/static/js/controller/controllerfac.js}"></script>
+
+	<script
+		src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+
+</body>
+</html>
+
+

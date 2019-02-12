@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+	
+<head data-th-fragment="header">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Core CSS - Include with every page -->
+    <link type="text/css" rel="stylesheet"
+        data-th-href="@{/static/css/bootstrap-3.1.1.min.css}" />
+        
+    <link type="text/css" rel="stylesheet" 
+        data-th-href="@{/static/font-awesome/css/font-awesome.css}" />
+
+    <!-- SB Admin CSS - Include with every page -->
+    <link type="text/css" rel="stylesheet"
+        data-th-href="@{/static/css/sb-admin.css}" />
+    
+    <style>
+        .no-border-on-me>thead>tr>th,
+        .no-border-on-me>tbody>tr>th,
+        .no-border-on-me>tfoot>tr>th,
+        .no-border-on-me>thead>tr>td,
+        .no-border-on-me>tbody>tr>td,
+        .no-border-on-me>tfoot>tr>td
+        {
+            border-top-style: none;
+            border-bottom-style: none;
+        }
+    </style>
+  
+	
+	<title data-th-text="Titulo">Proyecto de la Maestria SPRING</title>
+</head>
+
+<body>
+
+	<div data-th-replace="fragments/sb-admin :: top-nav"></div>
+    <div data-th-replace="fragments/sb-admin :: vert-nav-admin"></div>
+
+
+	<div class="container-fluid">
+		<div class="row">
+           
+		</div>
+	</div>
+	
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script type="text/javascript" 
+        data-th-src="@{static/js/jquery-1.11.0.min.js}"></script>
+        
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script type="text/javascript" 
+        data-th-src="@{static/js/bootstrap-3.1.1.min.js}"></script>
+
+    <!-- Core Scripts - Include with every page -->
+    <script type="text/javascript" 
+        data-th-src="@{static/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+        
+    <!-- SB Admin Scripts - Include with every page -->
+    <script type="text/javascript"
+        data-th-src="@{static/js/sb-admin.js}"></script>
+
+</body>
+</html>
